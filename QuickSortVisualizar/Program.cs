@@ -29,17 +29,31 @@ QuickSortAnimation(randomNumbers, 0, randomNumbers.Count - 1, frames);
 
 int currentFrame = 0;
 
+var transition = frames.Count * frames.First().Count;
+var steps = 2;
+
+
+
 while (window.IsOpen)
 {
     window.DispatchEvents();
     window.Clear(Color.Black);
 
     int counter = 0;
+    var total = 50;
     foreach (var number in frames[currentFrame])
     {
         float xPos = counter * 10.0f;
-        DrawBar(window, number, 10.0f, Color.Green, xPos, 0.0f);
+
+        // Generate a dynamic color based on the current frame
+        byte red = (byte)((currentFrame * 50 + total) % 256);
+        byte green = (byte)((currentFrame * 30) % 256);
+        byte blue = (byte)((currentFrame * 80 + counter * 5) % 256);
+        var curColor = new Color(red, green, blue, (byte)255);
+
+        DrawBar(window, number, 10.0f, curColor, xPos, 0.0f);
         counter++;
+        total += 5;
     }
 
     // Increment frame unless it's the last one
@@ -51,6 +65,7 @@ while (window.IsOpen)
 
     window.Display();
 }
+
 
 
 static void DrawBar(RenderWindow window, float height, float width, Color color, float x, float y)
